@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Capture{% endblock %}
+
+{% block head %}
+<style type="text/css">
+  .applet {
+    margin: 1em;
+    padding: 0;
+    border: 3px double black;
+    width: 95%;
+  }
+  applet {
+    width: 100%;
+    height: 100px;
+  }
+</style>
+{% endblock %}
+{% block content %}
+<h1>{{ name }} </h1>
+
+<h3>Paste your image into the box below (right click to bring up a menu)</h3>
+<div class="applet">
+  <applet code="com.hanhuy.screenshot.applet.Main" name="Clipboard Reader"
+       codebase="/applet" archive="screenshot.jar" mayscript="mayscript">
+    <param name="url" value="{{ upload_url }}"/>
+    <param name="bgcolor" value="#ffffff"/>
+    <param name="fgcolor" value="#666666"/>
+    Java Applet support is unavailable on this browser.  Please install
+    a JRE and Java Plugin from <a href="http://java.sun.com">Sun</a>
+  </applet></div>
+  <p>
+    Note:  consider resizing or moving the browser window out of the
+    way before selecting <em>Capture screen region</em>.  If the
+    browser window covers the region you wish to capture, you will
+    be unable to take a screenshot of the desired area.
+  </p>
+  <p>
+    Once the capture has been completed, do not use the back button to
+    return to this page to submit another capture, it will fail.
+  </p>
+</div>
+{% endblock %}

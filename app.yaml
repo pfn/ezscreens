@@ -1,0 +1,38 @@
+application: ezscreens
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /css
+  static_dir: public/css
+
+- url: /js
+  static_dir: public/js
+
+- url: /images
+  static_dir: public/images
+
+- url: /applet
+  static_dir: public/applet
+
+- url: /robots.txt
+  static_files: public/robots.txt
+  upload: public/robots.txt
+  mime_type: text/plain
+
+- url: /favicon.ico
+  static_files: public/favicon.ico
+  upload: public/favicon.ico
+  mime_type: image/png
+
+- url: /my
+  script: main.py
+  login: required
+
+- url: .*
+  script: main.py
+
+builtins:
+- appstats: on
+- remote_api: on

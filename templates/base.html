@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>EZ Screens : {% block title %}Home{% endblock %}</title>
+
+  <link type="text/css" rel="stylesheet" href="/css/ezscreens.css">
+  <link type="text/css" rel="stylesheet" href="/css/cupertino/jquery-ui-1.8.7.custom.css">
+
+  <!--[if lt IE 9]>
+  <script src="/js/html5.js"></script>
+  <![endif]-->
+  <script src="/js/jquery-1.4.4.min.js"></script>
+  <script src="/js/jquery-ui-1.8.7.custom.min.js"></script>
+
+  {% block head %}{% endblock %}
+</head>
+<body{% block bodyflags %}{% endblock %}>
+<nav id="mainnav">
+  <div>
+  <ul>
+    {% ifnotequal "/" request_uri %}
+    <li><a href="/">Home</a>
+    {% endifnotequal %}
+{% if logged_in %}
+    {% ifnotequal "/my" request_uri %}
+    <li> <a href="/my">My screens</a>
+    {% endifnotequal %}
+    {% block nav %}
+    {% endblock %}
+
+    <li id="logout-link"> Welcome back, {{ current_user.nickname }}
+         [<a href="{{ logout_url }}">Logout</a>]
+{% else %}
+  <li>[<a href="{{ login_url }}">Login</a>]</li>
+{% endif %}
+  </ul>
+  </div>
+</nav>
+
+<div id="info-message" style="display: none" class="ui-widget">
+  <div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;">
+    <p>
+      <span class="ui-icon ui-icon-info"
+            style="float: left; margin-right: .3em;"></span>
+        <span id="info-message-text">
+        </span>
+    </p>
+  </div>
+</div>
+<div id="error-message" style="display: none" class="ui-widget">
+  <div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+    <p>
+      <span class="ui-icon ui-icon-alert"
+            style="float: left; margin-right: .3em;"></span>
+        <strong>Error:</strong>
+        <span id="error-message-text">
+        </span>
+    </p>
+  </div>
+</div>
+<div id="content">
+{% block content %}No Content{% endblock %}
+</div>
+<div id="footer">
+  Copyright 2011 Perry Nguyen, All rights reserved.
+</div>
+</body>
+</html>

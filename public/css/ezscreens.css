@@ -1,0 +1,160 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body { background-color: #fff; color: #333; }
+
+body, p, ol, ul, dl, td, span {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   12px;
+  line-height: 14px;
+}
+
+.ui-helper-reset { font-size: 10px !important; line-height: 12px; }
+
+a { color: #2779aa; font-weight: bold }
+a:hover { text-decoration: none }
+
+div#content { margin: 5em 2em 1em; }
+div#footer {
+  padding-top: 1em;
+  border-top: 2px outset #777;
+  margin: .25em;
+  text-align: center
+}
+
+#info-message, #error-message {
+  height: 3em;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  z-index: 2;
+  margin: 0 .25em;
+  padding: 0;
+}
+
+h1, h2 {
+  /*border-bottom: 3px double gray;*/
+  padding-bottom: .25em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+h3, h4, h5, h6 {
+  /*border-bottom: 1px dotted gray;*/
+  padding-bottom: .2em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+p {
+  margin-top: .5em;
+  margin-bottom: 1em;
+}
+
+nav {
+  display: block;
+  height: 3em;
+  line-height: 3em;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  background: #003399;
+  z-index: 2;
+  color: #ccc;
+}
+nav a { color: #ffcc00 }
+nav > div {
+  background: #3366cc;
+  margin: .3em .25em .25em;
+  padding: .5em;
+  border: 2px outset #ccc;
+  border-radius: 6px 6px 6px 6px;
+  height: 1em;
+  line-height: 1em;
+}
+nav ul { display: inline }
+nav li { list-style: none }
+nav ul li {
+  border-left: 1px solid #777;
+  padding-left: 5px;
+  display: inline;
+  margin: 0;
+}
+nav ul li:first-child {
+  border: none;
+  padding-left: 0;
+  margin-left: 0;
+}
+nav ul li#throbber { float: right; margin-right: .25em }
+nav ul li:last-child { float: right }
+nav ul li#logout-link { float: right }
+
+li { margin-left: 2em }
+
+dl {
+  border-bottom: 1px solid #999;
+  margin: 0 1em 1em;
+}
+dt {
+    clear: left;
+    float: left;
+    width: 260px;
+    padding: 5px;
+    border-top: 1px solid #999;
+    font-weight: bold;
+}
+dd {
+    display: block;
+    margin-left: 265px; /* width + padding */
+    padding: 5px;
+    border-top: 1px solid #999;
+}
+
+table {
+  width: 100%;
+  border: 1px solid #999;
+  padding: 5px;
+}
+th {
+  text-align: left;
+  border-bottom: 1px solid #999;
+  margin-bottom: 1em;
+}
+
+tbody > tr:first-child td { padding-top: 15px; }
+td li { list-style: none; margin: 0 }
+
+tr.even { background: #d7ebf9 }
+
+td.devicemenu, div.devicemenu { display: none; padding-left: 2em; }
+div.devicemenu { margin-bottom: 1em }
+.devicemenu ul {
+  display: inline;
+}
+.devicemenu li {
+  padding-left: 5px;
+  display: inline;
+  margin: 0;
+}
+.devicemenu li:first-child {
+  border: none;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+form ul { list-style: none; display: table; border-spacing: 1em; }
+form ul li { display: table-row; }
+form ul li label {
+  display: table-cell;
+  vertical-align: top;
+  margin-right: 2em;
+}
+form ul li input, form ul li textarea {
+  display: table-cell;
+}
+fieldset { border: 1px solid #ccc; margin-bottom: 1em }
+fieldset > legend { color: #999 }

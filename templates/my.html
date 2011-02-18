@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load ezscreens %}
+{% block title %}My Captures{% endblock %}
+{% block content %}
+<h1>My Captures</h1>
+{% if screenshots %}
+  <table>
+  <colgroup>
+    <col width="50%"/>
+    <col/>
+    <col/>
+    <col width="200"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Date</th>
+      <th>Views</th>
+      <th>Preview</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for shot in screenshots %}
+    <tr>
+      <td>
+        <a href="/view/{{ shot.key.name|urlencode }}">{{ shot.name }}</a>
+      </td>
+      <td>{{ shot.create_ts }}</td>
+      <td>{{ shot.views }}</td>
+      <td>
+        <a href="/view/{{ shot.key.name|urlencode }}">
+        <img src="{{ shot|image_url:180 }}"/>
+        </a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+  </table>
+{% else %}
+<div class="ui-widget">
+  <div class="ui-state-highlight ui-corner-all" style="padding: 0 .7em;">
+    <p>
+      <span class="ui-icon ui-icon-info"
+            style="float: left; margin-right: .3em;"></span>
+        <span>
+          No images have been captured yet
+        </span>
+    </p>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}View{% endblock %}
+{% block head %}
+<style>
+#image-div {text-align: center}
+#image-div img { border: 2px solid #666 }
+</style>
+{% endblock %}
+{% block content %}
+  <h1>{{ name }} </h1>
+  <div id="image-div">
+    <img src="{{ image_url }}"/>
+  </div>
+{% endblock %}
