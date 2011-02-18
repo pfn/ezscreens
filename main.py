@@ -10,6 +10,7 @@ urls = [
     (r'/view/([a-z0-9]{4})/(.*)', ezscreens.ViewHandler),
     ('/capture/(.*)',             ezscreens.CaptureHandler),
     ('/my',                       ezscreens.MyHandler),
+    ('/faq',                      ezscreens.FaqHandler),
     ('/upload/(.*)',              ezscreens.UploadHandler),
     ('/upload/(.*)',              ezscreens.UploadHandler),
 ]

@@ -168,3 +168,6 @@ class MyHandler(Handler, RequestHandler):
         self.render("my.html", {
             "screenshots": screenshots,
         })
+class FaqHandler(Handler, RequestHandler):
+    def get(self):
+        self.render("faq.html")

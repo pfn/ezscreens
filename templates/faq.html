@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}FAQ{% endblock %}
+{% block content %}
+<h1>FAQ</h1>
+<dl>
+<dt>What is this site?</dt>
+<dd>This site is an easy to use location to upload any screenshot and
+    images copied to your clipboard.</dd>
+<dt>How does it work?</dt>
+<dd>Uploading images is performed through a Java Applet that is able to
+    detect images copied to your clipboard or capture screen regions on
+    your monitor.  To upload from your clipboard, right-click on the
+    applet box and select "Paste".  To capture a screen region, right
+    click on the applet box and select "Capture".
+<dt>Why can't I register a user?</dt>
+<dd>You don't need to register a user account with us, our site accepts your
+    Google (aka Gmail) login without any fuss.  There's no need to register
+    a new user.
+<dt>How do I login?</dt>
+<dd>Just click login, and enter your Google (Gmail) username and password
+    into Google's login form.  You never give us your password.</dd>
+<dt>Why do you need to use Java</dt>
+<dd>Java isn't as bad as many people make out, and used correctly, it is
+    a powerful tool in enabling features that normal web browsers or
+    Flash will never support.  In our case, the Java applet is used to
+    interact with your system clipboard and take screen captures from your
+    monitor.  These features would not work without Java.</dd>
+<dt>I get a security popup, what now?</dt>
+<dd>Our screen capturing applet requires security permissions.  We promise
+    you that nothing malicious is happening and it is a direct conduit from
+    your computer clipboard or screen to this website for uploading
+    screenshots.  In general, you should be wary of accepting security
+    requests from a site or name you do not know.</dd>
+<dt>Why should I login?</dt>
+<dd>There are many positive reasons for logging in.  When you login, your
+    captured images are not displayed on the home page for everyone to see.
+    You are also not subject to having your images automatically removed
+    when there are more than 500 anonymous images uploaded.  Your account
+    is granted storage for 100 images with older images automatically
+    removed when you go over your limit.  Being logged in also gives you
+    the ability to remove your images.  Anonymous users cannot change their
+    images.</dd>
+<dt>What do you do with my images?</dt>
+<dd>Nothing!  Your images are your property.  By uploading your images, you
+    give us the right to display the image to anyone that is able to access
+    this site and knows the correct URL.  We will not use your images for
+    any other purpose.</dd>
+<!--
+<dt> </dt>
+<dd> </dd>
+-->
+</dl>
+{% endblock %}

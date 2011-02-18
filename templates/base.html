@@ -25,6 +25,9 @@
     {% ifnotequal "/my" request_uri %}
     <li> <a href="/my">My screens</a>
     {% endifnotequal %}
+    {% ifnotequal "/faq" request_uri %}
+    <li> <a href="/faq">FAQ</a>
+    {% endifnotequal %}
     {% block nav %}
     {% endblock %}
 
