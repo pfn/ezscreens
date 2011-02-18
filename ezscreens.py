@@ -3,10 +3,11 @@ use_library('django', '1.2')
 
 import os
 import logging
+import time
 import urllib
-
 from random import Random
-from google.appengine.api import users, images
+
+from google.appengine.api import users, memcache
 from google.appengine.ext import db, blobstore
 from google.appengine.ext.webapp import template, RequestHandler
 from google.appengine.ext.webapp import blobstore_handlers
@@ -17,7 +18,7 @@ django.templatetags.__path__.extend(
         __import__('templatetags', {}, {}, ['']).__path__)
 
 class ScreenShot(db.Model):
-    owner     = db.UserProperty(auto_current_user=True)
+    owner     = db.UserProperty()
     image     = blobstore.BlobReferenceProperty()
     create_ts = db.DateTimeProperty(auto_now=True)
     name      = db.StringProperty()
@@ -55,9 +56,18 @@ class HomeHandler(Handler, RequestHandler):
     def get(self):
         screenshots = ScreenShot.gql(
                 "where owner = null order by create_ts desc").fetch(20)
+        fill_view_count(screenshots)
         self.render("home.html", {
             "screenshots": screenshots,
         })
+
+def fill_view_count(items):
+    """ update views with cached values """
+    for item in items:
+        cached = memcache.get(item.key().name() + "-viewcount")
+        if cached:
+            d = cached.split(":")
+            item.views = int(d[0])
 
 class ViewHandler(Handler, RequestHandler):
     def get(self, prefix, name):
@@ -69,7 +79,36 @@ class ViewHandler(Handler, RequestHandler):
             self.respond("Not found", 404)
             return
 
+        lastput = 0
+        now = int(time.time())
+        views = data.views
+
+        cached_views = memcache.get(path + "-viewcount")
+        if cached_views:
+            d = cached_views.split(":")
+            views = int(d[0])
+            lastput = int(d[1])
+        else:
+            lastput = now
+
+        if not views:
+            views = 0
+        views += 1
+
+        if views > data.views:
+            if (now - lastput) > 30:
+                data.views = views
+                data.put()
+        else:
+            views = data.views
+
+        # update for rendering, and saving if time elapsed
+        data.views = views
+
+        memcache.set(path + "-viewcount", "%d:%d" % (views, lastput))
+
         self.render("view.html", {
+            "screenshot": data,
             "name": name,
             "image_url": tt.to_image_url(data),
         })
@@ -98,14 +137,15 @@ class UploadHandler(Handler, blobstore_handlers.BlobstoreUploadHandler):
         else:
             data.image.delete()
 
+        user = users.get_current_user()
         uploaded = self.get_uploads('file')[0]
+        data.owner = user
         data.image = uploaded
         data.name  = name
         data.path  = path
         data.views = 0
         data.put()
 
-        user = users.get_current_user()
         limit = 100 if user else 500
 
         to_delete = ScreenShot.gql(
@@ -124,6 +164,7 @@ class MyHandler(Handler, RequestHandler):
         screenshots = ScreenShot.gql(
                 "where owner = :1 order by create_ts desc",
                 users.get_current_user()).fetch(100)
+        fill_view_count(screenshots)
         self.render("my.html", {
             "screenshots": screenshots,
         })
