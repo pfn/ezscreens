@@ -20,7 +20,7 @@ django.templatetags.__path__.extend(
 class ScreenShot(db.Model):
     owner     = db.UserProperty()
     image     = blobstore.BlobReferenceProperty()
-    create_ts = db.DateTimeProperty(auto_now=True)
+    create_ts = db.DateTimeProperty(auto_now_add=True)
     name      = db.StringProperty()
     path      = db.StringProperty()
     views     = db.IntegerProperty()
