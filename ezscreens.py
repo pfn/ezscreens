@@ -33,7 +33,7 @@ class Handler():
         self.response.out.write(self.process(tmpl, params))
 
     def process(self, tmpl, params={}):
-        user = users.get_current_user()
+        user = self.user()
 
         p = {
             'logged_in':    user != None,
@@ -88,8 +88,6 @@ class ViewHandler(Handler, RequestHandler):
             d = cached_views.split(":")
             views = int(d[0])
             lastput = int(d[1])
-        else:
-            lastput = now
 
         if not views:
             views = 0
@@ -105,6 +103,8 @@ class ViewHandler(Handler, RequestHandler):
         # update for rendering, and saving if time elapsed
         data.views = views
 
+        if not cached_views:
+            lastput = now
         memcache.set(path + "-viewcount", "%d:%d" % (views, lastput))
 
         self.render("view.html", {
@@ -116,15 +116,19 @@ class ViewHandler(Handler, RequestHandler):
 class CaptureHandler(Handler, RequestHandler):
     def get(self, name):
         name = urllib.unquote(name)
+        username = "-NONE-"
+        user = self.user()
+        if user:
+            username = user.email()
         upload_url = blobstore.create_upload_url(
-                "/upload/" + urllib.quote(name))
+                "/upload/%s/%s" % (urllib.quote(username), urllib.quote(name)))
         self.render("capture.html", {
             "name": name,
             "upload_url": upload_url,
         })
 
 class UploadHandler(Handler, blobstore_handlers.BlobstoreUploadHandler):
-    def post(self, name):
+    def post(self, username, name):
         r = Random()
         prefix = hex(r.randint(0x1000, 0xffff))[2:]
         name = urllib.unquote(name)
@@ -137,7 +141,10 @@ class UploadHandler(Handler, blobstore_handlers.BlobstoreUploadHandler):
         else:
             data.image.delete()
 
-        user = users.get_current_user()
+        user = None
+        username = urllib.unquote(username)
+        if username != "-NONE-":
+            user = users.User(email=username)
         uploaded = self.get_uploads('file')[0]
         data.owner = user
         data.image = uploaded
@@ -149,8 +156,8 @@ class UploadHandler(Handler, blobstore_handlers.BlobstoreUploadHandler):
         limit = 100 if user else 500
 
         to_delete = ScreenShot.gql(
-                "where owner = :1 order by create_ts desc",
-                users.get_current_user()).fetch(limit, offset=500)
+                "where owner = :1 order by create_ts desc", user).fetch(
+                        limit, offset=500)
 
         if len(to_delete) > 0:
             for item in to_delete:
@@ -163,11 +170,12 @@ class MyHandler(Handler, RequestHandler):
     def get(self):
         screenshots = ScreenShot.gql(
                 "where owner = :1 order by create_ts desc",
-                users.get_current_user()).fetch(100)
+                self.user()).fetch(100)
         fill_view_count(screenshots)
         self.render("my.html", {
             "screenshots": screenshots,
         })
+
 class FaqHandler(Handler, RequestHandler):
     def get(self):
         self.render("faq.html")

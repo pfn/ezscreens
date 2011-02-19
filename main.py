@@ -9,10 +9,9 @@ urls = [
     ('/',                         ezscreens.HomeHandler),
     (r'/view/([a-z0-9]{4})/(.*)', ezscreens.ViewHandler),
     ('/capture/(.*)',             ezscreens.CaptureHandler),
+    ('/upload/(.*?)/(.*)',        ezscreens.UploadHandler),
     ('/my',                       ezscreens.MyHandler),
     ('/faq',                      ezscreens.FaqHandler),
-    ('/upload/(.*)',              ezscreens.UploadHandler),
-    ('/upload/(.*)',              ezscreens.UploadHandler),
 ]
 
 def main():
