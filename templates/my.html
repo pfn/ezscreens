@@ -51,14 +51,14 @@ $(document).ready(function() {
     {% uuid as rowid %}
     <tr id="row-{{ rowid }}">
       <td>
-        <a href="/view/{{ shot.key.name|urlescape }}">{{ shot.name }}</a>
+        <a href="/view/{{ shot.key.name|urlencode }}">{{ shot.name }}</a>
         [<a id="delete-{{ rowid }}" href="#">delete</a>]
         <script type="text/javascript">
           $('#delete-{{ rowid }}').click(function() {
               $('#delete-dialog').dialog('open');
               var d = document.getElementById('delete-dialog');
               d.rowToDelete = "{{rowid}}";
-              d.captureToDelete = "{{ shot.key.name|urlescape }}";
+              d.captureToDelete = "{{ shot.key.name|urlencode }}";
               return false;
           });
         </script>
@@ -66,7 +66,7 @@ $(document).ready(function() {
       <td>{{ shot.create_ts }}</td>
       <td>{{ shot.views }}</td>
       <td>
-        <a href="/view/{{ shot.key.name|urlescape }}">
+        <a href="/view/{{ shot.key.name|urlencode }}">
           <img src="{{ shot|image_url:180 }}"/>
         </a>
       </td>

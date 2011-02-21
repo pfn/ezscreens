@@ -41,5 +41,5 @@ def to_encoded(v):
     return urllib.quote_plus(v, "/")
 
 register.filter('image_url', to_image_url)
-register.filter('urlescape', to_encoded)
+register.filter('urlencode', to_encoded)
 register.tag('uuid', do_uuid)
