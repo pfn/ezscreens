@@ -1,6 +1,33 @@
 {% extends "base.html" %}
 {% load ezscreens %}
 {% block title %}My Captures{% endblock %}
+{% block head %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#delete-dialog').dialog({
+        autoOpen: false,
+        modal: true,
+        width: 400,
+        buttons: {
+            "Delete": function() {
+                var d = document.getElementById("delete-dialog");
+                POST('/delete/' + d.captureToDelete, null,
+                        function(data) {
+                            $('#row-' + d.rowToDelete).remove();
+                        },
+                        function (xhr) {
+                            alert("Could not delete: " + xhr.status);
+                        });
+                $(this).dialog('close');
+            },
+            "Cancel": function() {
+                $(this).dialog('close');
+            },
+        }
+    });
+});
+</script>
+{% endblock %}
 {% block content %}
 <h1>My Captures</h1>
 {% if screenshots %}
@@ -21,15 +48,26 @@
   </thead>
   <tbody>
   {% for shot in screenshots %}
-    <tr>
+    {% uuid as rowid %}
+    <tr id="row-{{ rowid }}">
       <td>
-        <a href="/view/{{ shot.key.name|urlencode }}">{{ shot.name }}</a>
+        <a href="/view/{{ shot.key.name|urlescape }}">{{ shot.name }}</a>
+        [<a id="delete-{{ rowid }}" href="#">delete</a>]
+        <script type="text/javascript">
+          $('#delete-{{ rowid }}').click(function() {
+              $('#delete-dialog').dialog('open');
+              var d = document.getElementById('delete-dialog');
+              d.rowToDelete = "{{rowid}}";
+              d.captureToDelete = "{{ shot.key.name|urlescape }}";
+              return false;
+          });
+        </script>
       </td>
       <td>{{ shot.create_ts }}</td>
       <td>{{ shot.views }}</td>
       <td>
-        <a href="/view/{{ shot.key.name|urlencode }}">
-        <img src="{{ shot|image_url:180 }}"/>
+        <a href="/view/{{ shot.key.name|urlescape }}">
+          <img src="{{ shot|image_url:180 }}"/>
         </a>
       </td>
     </tr>
@@ -49,4 +87,10 @@
   </div>
 </div>
 {% endif %}
+<div id="delete-dialog" style="display: none">
+  <p>
+    Are you sure you want to delete this capture?
+    This cannot be undone.
+  </p>
+</div>
 {% endblock %}

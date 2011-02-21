@@ -29,7 +29,7 @@
       $("button").click(function() {
           var name = $("input").val();
           if (name == defaultValue)
-              name = Date.now().toString(16);
+              name = "{{ defaultName }}";
           location = "/capture/" + name;
       });
   });

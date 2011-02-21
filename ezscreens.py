@@ -6,6 +6,7 @@ import logging
 import time
 import urllib
 from random import Random
+from hashlib import md5
 
 from google.appengine.api import users, memcache
 from google.appengine.ext import db, blobstore
@@ -59,6 +60,7 @@ class HomeHandler(Handler, RequestHandler):
         fill_view_count(screenshots)
         self.render("home.html", {
             "screenshots": screenshots,
+            "defaultName": md5(str(time.time())).hexdigest()[8:20],
         })
 
 def fill_view_count(items):
@@ -71,7 +73,7 @@ def fill_view_count(items):
 
 class ViewHandler(Handler, RequestHandler):
     def get(self, prefix, name):
-        name = urllib.unquote(name)
+        name = urllib.unquote_plus(name)
         path = "%s/%s" % (prefix, name)
 
         data = ScreenShot.get_by_key_name(path)
@@ -115,13 +117,14 @@ class ViewHandler(Handler, RequestHandler):
 
 class CaptureHandler(Handler, RequestHandler):
     def get(self, name):
-        name = urllib.unquote(name)
+        name = urllib.unquote_plus(name)
         username = "-NONE-"
         user = self.user()
         if user:
             username = user.email()
         upload_url = blobstore.create_upload_url(
-                "/upload/%s/%s" % (urllib.quote(username), urllib.quote(name)))
+                "/upload/%s/%s" % (urllib.quote_plus(username, "/"),
+                        urllib.quote_plus(name, "/")))
         self.render("capture.html", {
             "name": name,
             "upload_url": upload_url,
@@ -131,7 +134,7 @@ class UploadHandler(Handler, blobstore_handlers.BlobstoreUploadHandler):
     def post(self, username, name):
         r = Random()
         prefix = hex(r.randint(0x1000, 0xffff))[2:]
-        name = urllib.unquote(name)
+        name = urllib.unquote_plus(name)
 
         path = "%s/%s" % (prefix, name)
 
@@ -142,7 +145,7 @@ class UploadHandler(Handler, blobstore_handlers.BlobstoreUploadHandler):
             data.image.delete()
 
         user = None
-        username = urllib.unquote(username)
+        username = urllib.unquote_plus(username)
         if username != "-NONE-":
             user = users.User(email=username)
         uploaded = self.get_uploads('file')[0]
@@ -164,7 +167,7 @@ class UploadHandler(Handler, blobstore_handlers.BlobstoreUploadHandler):
                 item.image.delete()
             db.delete(to_delete)
 
-        self.redirect("/view/%s/%s" % (prefix, urllib.quote(name)))
+        self.redirect("/view/%s/%s" % (prefix, urllib.quote_plus(name, "/")))
 
 class MyHandler(Handler, RequestHandler):
     def get(self):
@@ -175,6 +178,22 @@ class MyHandler(Handler, RequestHandler):
         self.render("my.html", {
             "screenshots": screenshots,
         })
+
+class DeleteHandler(Handler, RequestHandler):
+    def post(self, prefix, name):
+        name = urllib.unquote_plus(name)
+        path = "%s/%s" % (prefix, name)
+        user = self.user()
+        data = ScreenShot.get_by_key_name(path)
+
+        if not data:
+            self.respond("Not found", 404)
+            return
+        if not user or data.owner != user:
+            self.respond("Not allowed", 403)
+            return
+        data.image.delete()
+        data.delete()
 
 class FaqHandler(Handler, RequestHandler):
     def get(self):
