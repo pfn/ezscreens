@@ -69,7 +69,7 @@ function onaction() {
 }
 
 function resetapplet() {
-    $('#applet-container-outer').hide();
+    $('#applet-container-outer').slideUp('fast');
     $('#applet').remove();
     $("#new-capture-reset").css('visibility', 'hidden');
     $("#new-capture-input").removeAttr("disabled");
