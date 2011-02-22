@@ -3,6 +3,24 @@
   margin: 0;
 }
 
+#new-capture-div input {
+  vertical-align: center;
+  height: 2em;
+  line-height: 2em;
+}
+#new-capture-div button {
+  vertical-align: center;
+}
+input.blank { font-style: italic; color: grey; }
+.applet {
+    margin: 1em;
+    padding: 0;
+    border: 3px double black;
+    width: 95%;
+    height: 100px;
+}
+applet { width: 100%; height: 100px; }
+
 body { background-color: #fff; color: #333; }
 
 body, p, ol, ul, dl, td, span {

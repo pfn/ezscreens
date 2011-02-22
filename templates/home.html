@@ -1,44 +1,7 @@
 {% extends "base.html" %}
 {% load ezscreens %}
-{% block head %}
-<style type="text/css">
-  button { margin-left: 1em }
-  input { height: 2em }
-  .blank { font-style: italic; color: grey; }
-</style>
-<script type="text/javascript">
-  $(document).ready(function() {
-      $("button").button();
-
-      var defaultValue =
-              "Set a name for your new capture or leave blank for a default";
-      $("input").focus(function() {
-          if ($("input").val() == defaultValue) {
-              $("input").val("");
-          }
-          $("input").removeClass("blank");
-      });
-      $("input").blur(function() {
-          if ($("input").val().trim() == "") {
-              $("input").val(defaultValue);
-              $("input").addClass("blank");
-          }
-      });
-      $("input").val(defaultValue);
-      $("input").addClass("blank");
-      $("button").click(function() {
-          var name = $("input").val();
-          if (name == defaultValue)
-              name = "{{ defaultName }}";
-          location = "/capture/" + name;
-      });
-  });
-</script>
-{% endblock %}
 {% block content %}
-<div>
-  <input size="64" type="text"/><button>New capture</button>
-</div>
+{% include "inline_capture_fragment.html" %}
 <h1>Recent captures</h1>
 {% if screenshots %}
   <table>

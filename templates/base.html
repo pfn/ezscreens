@@ -16,6 +16,10 @@
   {% block head %}{% endblock %}
 </head>
 <body{% block bodyflags %}{% endblock %}>
+
+  <!-- stupid deployJava.js throws warnings in FF if not in <body> -->
+  <script src="/js/deployJava.js"></script>
+
 <nav id="mainnav">
   <div>
   <ul>
@@ -34,6 +38,9 @@
 
     <li id="logout-link"> Welcome back, {{ current_user.nickname }}
          [<a href="{{ logout_url }}">Logout</a>]
+    <li id="throbber" style="display: none">
+      <img src="/images/throbber.gif"/>
+    </li>
 {% else %}
   <li>[<a href="{{ login_url }}">Login</a>]</li>
 {% endif %}

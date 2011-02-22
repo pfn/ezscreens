@@ -2,12 +2,19 @@
 {% block title %}View{% endblock %}
 {% block head %}
 <style>
-#image-div {text-align: center}
+#image-div {text-align: center; margin-top: 2em }
 #image-div img { border: 2px solid #666 }
 </style>
 {% endblock %}
 {% block content %}
   <h1>{{ name }} </h1>
+  {% include "inline_capture_fragment.html" %}
+  <script type="text/javascript">
+    $("#new-capture").button('option', 'label', "Capture again");
+    $("#new-capture-reset").button('option', 'label', "Clear");
+    $("#new-capture-input").val("{{ name }}");
+    $("#new-capture-input").hide();
+  </script>
   <div id="image-div">
     <img src="{{ image_url }}"/>
   </div>

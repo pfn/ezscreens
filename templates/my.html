@@ -29,6 +29,7 @@ $(document).ready(function() {
 </script>
 {% endblock %}
 {% block content %}
+{% include "inline_capture_fragment.html" %}
 <h1>My Captures</h1>
 {% if screenshots %}
   <table>

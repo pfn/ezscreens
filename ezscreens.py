@@ -13,6 +13,7 @@ from google.appengine.ext import db, blobstore
 from google.appengine.ext.webapp import template, RequestHandler
 from google.appengine.ext.webapp import blobstore_handlers
 import django.templatetags
+from django.utils import simplejson
 import templatetags.ezscreens as tt
 
 django.templatetags.__path__.extend(
@@ -129,6 +130,27 @@ class CaptureHandler(Handler, RequestHandler):
             "name": name,
             "upload_url": upload_url,
         })
+
+class UploadInfoHandler(Handler, RequestHandler):
+    def get(self, name):
+        if len(name) == 0:
+            name = md5(str(time.time())).hexdigest()[8:20]
+        else:
+            name = urllib.unquote_plus(name)
+
+        username = "-NONE-"
+        user = self.user()
+        if user:
+            username = user.email()
+
+        url = blobstore.create_upload_url("/upload/%s/%s" % (
+                urllib.quote_plus(username, "/"), urllib.quote_plus(name, "/")))
+        result = {
+            "name": name,
+            "url": url,
+        }
+        self.response.headers['Content-type'] = "application/json"
+        self.respond(simplejson.dumps(result))
 
 class UploadHandler(Handler, blobstore_handlers.BlobstoreUploadHandler):
     def post(self, username, name):

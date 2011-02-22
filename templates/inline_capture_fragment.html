@@ -1,0 +1,107 @@
+<div id="new-capture-div">
+<input id="new-capture-input" size="64" type="text"/>
+<button id="new-capture">New capture</button>
+<button id="new-capture-reset" style="visibility: hidden">Reset</button>
+<script type="text/javascript">
+$("#new-capture").button();
+$("#new-capture-reset").button();
+var defaultValue =
+        "Set a name for your new capture or leave blank for a default";
+
+$("#new-capture-input").focus(function() {
+    if ($("#new-capture-input").val() == defaultValue) {
+        $("#new-capture-input").val("");
+    }
+    $("#new-capture-input").removeClass("blank");
+});
+
+function onblur() {
+    if ($.trim($("#new-capture-input").val()) == "") {
+        $("#new-capture-input").val(defaultValue);
+        $("#new-capture-input").addClass("blank");
+    }
+}
+
+$("#new-capture-input").blur(onblur);
+
+$("#new-capture-input").val(defaultValue);
+$("#new-capture-input").addClass("blank");
+
+function onaction() {
+    onblur();
+    $("#new-capture-input").attr('readonly', true);
+    $("#new-capture-input").attr('disabled', true);
+    $("#new-capture").attr('disabled', true);
+    $("#new-capture-reset").css("visibility", "visible");
+
+    var name = $("#new-capture-input").val();
+    if (name == defaultValue) {
+        name = "";
+        $("#new-capture-input").val(name);
+        $("#new-capture-input").removeClass("blank");
+    }
+    throb();
+
+    GET("/uploadinfo/" + escape(name) + "?r=" + (new Date().getTime()),
+    function(data) {
+        throb(false);
+        $("#applet-container-outer").slideDown('fast');
+
+        if ($("#new-capture-input").val() != data.name)
+            $("#new-capture-input").val(data.name);
+
+        runApplet(document.getElementById('applet-container'), {
+            id: 'applet',
+            codebase: '/applet',
+            code: 'com.hanhuy.screenshot.applet.Main',
+            name: 'Screen Capturer',
+            archive: 'screenshot.jar',
+            mayscript: 'mayscript'
+        }, {
+            'url': data.url,
+            'bgcolor': '#ffffff',
+            'fgcolor': '#666666'
+        }, 'json');
+    }, function(xhr) {
+        throb(false);
+        alert("Unable to request upload information, error: " + xhr.status);
+    });
+}
+
+function resetapplet() {
+    $('#applet-container-outer').hide();
+    $('#applet').remove();
+    $("#new-capture-reset").css('visibility', 'hidden');
+    $("#new-capture-input").addClass("blank");
+    $("#new-capture-input").removeAttr("disabled");
+    $("#new-capture-input").removeAttr("readonly");
+    $("#new-capture").removeAttr("disabled");
+}
+
+
+$("#new-capture").click(onaction);
+$("#new-capture-input").keydown(function(e) {
+    if (e.keyCode == 10 || e.keyCode == 13)
+        onaction();
+});
+
+$("#new-capture-reset").click(resetapplet);
+$(window).unload(resetapplet);
+</script>
+</div>
+
+<div id="applet-container-outer" style="display: none">
+<h3>Paste your image into the box below (right click to bring up a menu)</h3>
+<div id="applet-container" class="applet">
+</div>
+  <p>
+    Note:  consider resizing or moving the browser window out of the
+    way before selecting <em>Capture screen region</em>.  If the
+    browser window covers the region you wish to capture, you will
+    be unable to take a screenshot of the desired area.
+  </p>
+  <p>
+    If a paste menu does not appear when right clicking, try clicking the
+    reset and new capture button again.
+  </p>
+</div>

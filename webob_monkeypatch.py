@@ -131,7 +131,8 @@ def wsgi_call(self, environ, start_response):
       else:
         handler.error(501)
     except Exception, e:
-      handler.handle_exception(e, self.__debug)
+      # can't seem to access self.__debug, True instead
+      handler.handle_exception(e, True)
   else:
     response.set_status(404)
 
