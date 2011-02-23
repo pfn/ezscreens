@@ -11,11 +11,14 @@ $(document).ready(function() {
         buttons: {
             "Delete": function() {
                 var d = document.getElementById("delete-dialog");
+                throb();
                 POST('/delete/' + d.captureToDelete, null,
                         function(data) {
+                            throb(false);
                             $('#row-' + d.rowToDelete).remove();
                         },
                         function (xhr) {
+                            throb(false);
                             alert("Could not delete: " + xhr.status);
                         });
                 $(this).dialog('close');
