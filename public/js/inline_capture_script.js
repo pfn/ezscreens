@@ -39,7 +39,7 @@ function onaction() {
     onblur();
     $("#new-capture-input").attr('readonly', true);
     $("#new-capture-input").attr('disabled', true);
-    $("#new-capture").attr('disabled', true);
+    $("#new-capture").button('option', 'disabled', true);
     $("#new-capture-reset").css("visibility", "visible");
 
     var name = $("#new-capture-input").val();
@@ -82,7 +82,7 @@ function resetapplet() {
     $("#new-capture-reset").css('visibility', 'hidden');
     $("#new-capture-input").removeAttr("disabled");
     $("#new-capture-input").removeAttr("readonly");
-    $("#new-capture").removeAttr("disabled");
+    $("#new-capture").button('option', 'disabled', false);
 }
 
 
