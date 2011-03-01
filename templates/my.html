@@ -45,7 +45,7 @@ $(document).ready(function() {
   <thead>
     <tr>
       <th>Name</th>
-      <th>Date</th>
+      <th>When</th>
       <th>Views</th>
       <th>Preview</th>
     </tr>
@@ -67,7 +67,7 @@ $(document).ready(function() {
           });
         </script>
       </td>
-      <td>{{ shot.create_ts }}</td>
+      <td>{{ shot.create_ts|timesince }} ago</td>
       <td>{{ shot.views }}</td>
       <td>
         <a href="/view/{{ shot.key.name|urlencode }}">
