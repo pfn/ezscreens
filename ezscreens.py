@@ -1,6 +1,3 @@
-from google.appengine.dist import use_library
-use_library('django', '1.2')
-
 import os
 import logging
 import time
@@ -182,7 +179,7 @@ class UploadHandler(Handler, blobstore_handlers.BlobstoreUploadHandler):
 
         to_delete = ScreenShot.gql(
                 "where owner = :1 order by create_ts desc", user).fetch(
-                        limit, offset=500)
+                        100, offset=limit)
 
         if len(to_delete) > 0:
             for item in to_delete:
