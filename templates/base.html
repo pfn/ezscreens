@@ -41,6 +41,9 @@
       <img src="/images/throbber.gif"/>
     </li>
 {% else %}
+  {% ifnotequal "/faq" request_uri %}
+  <li> <a href="/faq">FAQ</a>
+  {% endifnotequal %}
   <li>[<a href="{{ login_url }}">Login</a>]</li>
 {% endif %}
   </ul>
