@@ -4,7 +4,7 @@ import uuid
 import urllib
 from urlparse import urlsplit, urlunsplit
 from django.template import Library, Node, TemplateSyntaxError
-from google.appengine.api import images
+from google.appengine.api import images, memcache
 
 class RandomValueNode(Node):
     def __init__(self, outname):
@@ -31,8 +31,15 @@ def fix_image_url(url):
         url = urlunsplit(data)
     return url
     
+def get_serving_url(image):
+    url = image.image_url
+    if not url:
+        url = image.image_url = images.get_serving_url(str(image.image.key()))
+        image.put()
+    return url
+
 def to_image_url(v, size=None):
-    url = fix_image_url(images.get_serving_url(str(v.image.key())))
+    url = fix_image_url(get_serving_url(v))
     sizearg = ""
     if size:
         sizearg = "=s%d" % 180

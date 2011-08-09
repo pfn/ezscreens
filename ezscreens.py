@@ -19,6 +19,7 @@ django.templatetags.__path__.extend(
 class ScreenShot(db.Model):
     owner     = db.UserProperty()
     image     = blobstore.BlobReferenceProperty()
+    image_url = db.StringProperty()
     create_ts = db.DateTimeProperty(auto_now_add=True)
     name      = db.StringProperty()
     path      = db.StringProperty()
@@ -63,8 +64,11 @@ class HomeHandler(Handler, RequestHandler):
 
 def fill_view_count(items):
     """ update views with cached values """
+    item_keys = [item.key().name() + "-viewcount" for item in items]
+    cached_views = memcache.get_multi(item_keys)
     for item in items:
-        cached = memcache.get(item.key().name() + "-viewcount")
+        k = item.key().name() + "-viewcount"
+        cached = cached_views.get(k, None)
         if cached:
             d = cached.split(":")
             item.views = int(d[0])

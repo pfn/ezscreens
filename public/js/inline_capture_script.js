@@ -4,7 +4,7 @@ if (navigator.userAgent.indexOf("Mobile") != -1) {
     $('#applet-container-outer').remove();
     return;
 }
-if (!deployJava.versionCheck("1.6")) {
+if (!deployJava.versionCheck("1.6+")) {
     $('#no-applet-support').show();
     $('#new-capture-div').remove();
     $('#applet-container-outer').remove();
