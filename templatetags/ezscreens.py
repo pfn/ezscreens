@@ -40,9 +40,10 @@ def get_serving_url(image):
 
 def to_image_url(v, size=None):
     url = fix_image_url(get_serving_url(v))
-    sizearg = ""
     if size:
         sizearg = "=s%d" % 180
+    else:
+        sizearg = "=s0"
     return "%s%s" % (url,sizearg)
 
 def to_encoded(v):
