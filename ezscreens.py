@@ -134,7 +134,7 @@ class CaptureHandler(Handler, RequestHandler):
                         urllib.quote_plus(name, "/")))
         self.render("capture.html", {
             "name": name,
-            "upload_url": upload_url,
+            "upload_url": upload_url
         })
 
 class UploadInfoHandler(Handler, RequestHandler):

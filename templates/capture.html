@@ -18,24 +18,11 @@
 {% endblock %}
 {% block content %}
 <h1>{{ name }} </h1>
+{% include "inline_capture_fragment.html" %}
 
-<h3>Drop your image into the box below</h3>
-<div class="applet">
-  <applet code="com.hanhuy.screenshot.applet.Main" name="Clipboard Reader"
-       codebase="/applet" archive="screenshot.jar" mayscript="mayscript">
-    <param name="url" value="{{ upload_url }}"/>
-    <param name="bgcolor" value="#ffffff"/>
-    <param name="fgcolor" value="#666666"/>
-    Java Applet support is unavailable on this browser.  Please install
-    a JRE and Java Plugin from <a href="http://java.com">java.com</a>
-  </applet></div>
-  <p>
-    Note:  consider resizing or moving the browser window out of the
-    way before selecting <em>Capture screen</em>.  If the browser window            covers the region you wish to capture, you will be unable to take a             screenshot of the desired area.
-  </p>
-  <p>
-    If the applet does not appear in the box above after a few seconds, press
-    reset and the new capture button again.
-  </p>
-</div>
+<script type="text/javascript">
+    $("#new-capture-input").val("{{ name }}");
+    $("#new-capture")[0].dispatchEvent(new MouseEvent("click", { view: window, bubbles: true, cancelable: true }));
+    $("#new-capture-div").remove();
+</script>
 {% endblock %}
