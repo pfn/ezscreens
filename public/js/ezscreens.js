@@ -5,7 +5,7 @@ function POST(url, data, success, error, datatype) {
       data: data,
       success: success,
       error: error,
-      dataType: datatype
+      contentType: false
   });
 }
 function GET(url, success, error, datatype) {

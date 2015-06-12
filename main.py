@@ -1,6 +1,7 @@
 #!/usr/bin/env python
-from google.appengine.dist import use_library
-use_library('django', '1.2')
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+
 import ezscreens
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
@@ -18,10 +19,11 @@ urls = [
 ]
 
 def main():
-    webob_monkeypatch.patch()
-    application = webapp.WSGIApplication(urls, debug=True)
+    #webob_monkeypatch.patch()
     util.run_wsgi_app(application)
 
 
 if __name__ == '__main__':
     main()
+
+application = webapp.WSGIApplication(urls, debug=True)

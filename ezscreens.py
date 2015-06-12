@@ -7,14 +7,18 @@ from hashlib import md5
 
 from google.appengine.api import users, memcache
 from google.appengine.ext import db, blobstore
-from google.appengine.ext.webapp import template, RequestHandler
+from google.appengine.ext import webapp
+from google.appengine.ext.webapp import RequestHandler
 from google.appengine.ext.webapp import blobstore_handlers
 import django.templatetags
+from django.template import loader
+from django import template
 from django.utils import simplejson
 import templatetags.ezscreens as tt
 
 django.templatetags.__path__.extend(
         __import__('templatetags', {}, {}, ['']).__path__)
+#template.register_template_library('templatetags')
 
 class ScreenShot(db.Model):
     owner     = db.UserProperty()
@@ -44,8 +48,9 @@ class Handler():
         }
         p.update(params)
 
-        path = os.path.join(os.path.dirname(__file__), "templates", tmpl)
-        return template.render(path, p)
+        #path = os.path.join(os.path.dirname(__file__), "templates", tmpl)
+        return loader.render_to_string(tmpl, p)
+        #return template.render(path, p)
 
     def respond(self, body, status=200):
         if status != 200:
